@@ -65,16 +65,18 @@ app.post("/gameOn", function (req, res) {
 app.get("/gameplay", function (req, res) {
   word = 'term2';
   console.log("Prior to render.");
-  res.render('gameplay', {blanks: word}, {count: guessCount});
+  res.render('gameplay', {blanks: word});
 });
 
 // This is called by submitting the form on the gameplay page.
 app.post("/guess_Letter", function (req, res) {
   guessCount++;
+  word = 'term3';
   let letter = req.body.guess;
   console.log("Letter Guessed: " + letter);
   console.log("Guesses: " + guessCount);
-  res.redirect('/gameplay');
+  res.render('gameplay', {blanks: word, count: guessCount});
+  // res.redirect('/gameplay');
 });
 
 
