@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+ <html>
+   <head>
+     <title>Word Guess</title>
+     <link rel="stylesheet" type="text/css" href="stylesheets/styles.css" />
+     <link rel="stylesheet" type="text/css" href="/stylesheets/styles.css" />
+   </head>
+<body>
+     <form action="/guess_Letter" method="post">
+           <p>Word Guess: {{word}}</p>
+           <p>Guesses Remaining: {{count}}</p>
+           <input type="text" name="guess" placeholder="Guess a letter..." />
+           <button type="submit">Submit Guess</button>
+      </form>
+  <script type="text/javascript" src="javascripts/main.js"></script>
+</body>
