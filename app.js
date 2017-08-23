@@ -52,7 +52,7 @@ let word = 'example';
 
 // This is called by submitting the form on the index page.
 app.post("/gameOn", function (req, res) {
-  word = 'term';
+  // word = 'term';
   console.log("Game Mode On");
   // , {count: guessCount}
   // res.redirect('/gameplay');
@@ -63,15 +63,15 @@ app.post("/gameOn", function (req, res) {
 
 // This brings up the gameplay page.
 app.get("/gameplay", function (req, res) {
-  word = 'term2';
+  // word = 'term2';
   console.log("Prior to render.");
-  res.render('gameplay', {blanks: word});
+  res.render('gameplay', {blanks: word, count: guessCount});
 });
 
 // This is called by submitting the form on the gameplay page.
-app.post("/guess_Letter", function (req, res) {
+app.post("/guess_game", function (req, res) {
   guessCount++;
-  word = 'term3';
+  // word = 'term3';
   let letter = req.body.guess;
   console.log("Letter Guessed: " + letter);
   console.log("Guesses: " + guessCount);
