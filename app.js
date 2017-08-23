@@ -47,18 +47,20 @@ app.get("/", function (req, res) {
   res.render('index');
 });
 
-// This is called by submitting the form on the index page.
-app.post("/gameOn", function (req, res) {
-  console.log("Game Mode On");
-  res.redirect('/gameplay');
-});
-
 let guessCount = 0;
 let word = '';
 
+// This is called by submitting the form on the index page.
+app.post("/gameOn", function (req, res) {
+  word = 'term';
+  console.log("Game Mode On");
+  res.redirect('/gameplay', {word: 'word'}, {count: guessCount});
+  console.log("Render Here");
+  // res.render('gameplay', {word: word}, {count: guessCount});
+});
+
 // This brings up the gameplay page.
 app.get("/gameplay", function (req, res) {
-  word = 'term';
   console.log("Prior to render.");
   res.render('gameplay', {word: word}, {count: guessCount});
 });
@@ -68,6 +70,7 @@ app.post("/guess_Letter", function (req, res) {
   guessCount++;
   let letter = req.body.guess;
   console.log("Letter Guessed: " + letter);
+  console.log("Guesses: " + guessCount);
   res.redirect('/gameplay');
 });
 
