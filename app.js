@@ -50,15 +50,33 @@ app.get("/", function (req, res) {
 let guessCount = 0;
 let word = 'example';
 
-// This is called by submitting the form on the index page.
-app.post("/gameOn", function (req, res) {
-  // word = 'term';
-  console.log("Game Mode On");
-  // , {count: guessCount}
+// This is called by submitting the form on the index page
+// This is called by submitting the form on the gameplay page.
+app.post("/guess_game", function (req, res) {
+  // word = 'term3';
+  let letter = req.body.guess;
+  if(guessCount !== 0){
+
+  if(letter.length > 1 || letter.length === 0){
+    console.log("Guess not one character");
+    res.render('gameplay', {blanks: word, count: guessCount});
+  }
+  else{
+  console.log("Letter Guessed: " + letter);
+  console.log("Letters.length: " + letter.length)
+  console.log("Guesses: " + guessCount);
+  res.render('gameplay', {blanks: word, count: guessCount});
+  console.log("Add to count");
+  guessCount++;
+  }
+  }
+  else{
+    console.log("guessCount Initially " + guessCount);
+    res.render('gameplay', {blanks: word, count: guessCount});
+    console.log("Add to count");
+    guessCount++;
+  }
   // res.redirect('/gameplay');
-  console.log("Render Here");
-  // , {count: guessCount}
-  res.render('gameplay', {blanks: word});
 });
 
 // This brings up the gameplay page.
@@ -68,16 +86,7 @@ app.get("/gameplay", function (req, res) {
   res.render('gameplay', {blanks: word, count: guessCount});
 });
 
-// This is called by submitting the form on the gameplay page.
-app.post("/guess_game", function (req, res) {
-  guessCount++;
-  // word = 'term3';
-  let letter = req.body.guess;
-  console.log("Letter Guessed: " + letter);
-  console.log("Guesses: " + guessCount);
-  res.render('gameplay', {blanks: word, count: guessCount});
-  // res.redirect('/gameplay');
-});
+
 
 
 
