@@ -37,6 +37,9 @@ app.use(express.static(__dirname + '/public'));
 
 
 // This begins the interesting code:
+// This begins the interesting code:
+// This begins the interesting code:
+
 
 // This controls the localhost page.
 app.get("/", function (req, res) {
@@ -51,17 +54,20 @@ app.post("/gameOn", function (req, res) {
 });
 
 let guessCount = 0;
+let word = '';
 
 // This brings up the gameplay page.
 app.get("/gameplay", function (req, res) {
-  let word_Filler = 'term';
-  res.render('gameplay', {word: word_Filler}, {count: guessCount});
+  word = 'term';
+  console.log("Prior to render.");
+  res.render('gameplay', {word: word}, {count: guessCount});
 });
 
 // This is called by submitting the form on the gameplay page.
 app.post("/guess_Letter", function (req, res) {
   guessCount++;
-  console.log("Letter Guessed");
+  let letter = req.body.guess;
+  console.log("Letter Guessed: " + letter);
   res.redirect('/gameplay');
 });
 
