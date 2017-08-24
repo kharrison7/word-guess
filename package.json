@@ -11,8 +11,11 @@
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.17.2",
+    "cookie-parser": "^1.4.3",
     "express": "^4.15.4",
     "express-session": "^1.15.5",
-    "mustache-express": "^1.2.5"
+    "morgan": "^1.8.2",
+    "mustache-express": "^1.2.5",
+    "serve-favicon": "^2.4.3"
   }
 }
