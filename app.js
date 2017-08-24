@@ -59,10 +59,12 @@ function guessWord(){
   return words[Math.floor(Math.random() * (235886 + 1)) + 0];
 }
 let word = '';
-let guessCount = 0;
+const numGuesses = 10;
+let guessCount = numGuesses;
 let wordArray = [];
 let blankArray = [];
 let wordAndBlank = '';
+let letterInside = 0;
 
 
 function makeArrays(){
@@ -92,15 +94,19 @@ console.log("wordAndBlank: " + wordAndBlank);
 function checkLetter(letter){
 console.log("Letter in checkLetter: " + letter);
 let i = 0;
+letterInside = 0;
    while(i<word.length){
      if (letter === wordArray[i]){
        blankArray[i] = letter;
+       letterInside++;
      }
      i++;
    }
+   if(letterInside === 0){
+     guessCount--;
+   }
    wordAndBlank = blankArray.join(" ");
    console.log("wordAndBlank: " + wordAndBlank);
-
 }
 
 
@@ -109,7 +115,11 @@ let i = 0;
 // This controls the localhost page.
 app.get("/", function (req, res) {
   // This brings up the index.mustache HTML.
-  guessCount = 0;
+  // guessCount = numGuesses;
+  // word = '';
+  // wordArray = [];
+  // blankArray = [];
+  // wordAndBlank = '';
   res.render('index');
 });
 
@@ -119,7 +129,7 @@ app.get("/", function (req, res) {
 app.post("/guess_game", function (req, res) {
   // word = 'term3';
   let letter = req.body.guess;
-  if(guessCount !== 0){
+  if(guessCount !== numGuesses){
   if(letter.length > 1 || letter.length === 0){
     console.log("Guess not one character");
     res.render('gameplay', {blanks: word, count: guessCount});
@@ -135,7 +145,7 @@ app.post("/guess_game", function (req, res) {
   console.log("Guesses: " + guessCount);
   res.render('gameplay', {blanks: wordAndBlank, count: guessCount});
   // console.log("Add to count");
-  guessCount++;
+  // guessCount--;
   }
   }
   // If this is the first run through do the following.
@@ -146,7 +156,7 @@ app.post("/guess_game", function (req, res) {
     // console.log("guessCount Initially " + guessCount);
     res.render('gameplay', {blanks: wordAndBlank, count: guessCount});
     // console.log("Add to count");
-    guessCount++;
+    guessCount--;
   }
   // res.redirect('/gameplay');
 });
