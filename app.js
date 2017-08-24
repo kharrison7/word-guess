@@ -65,13 +65,11 @@ let wordArray = [];
 let blankArray = [];
 let wordAndBlank = '';
 let letterInside = 0;
+let attemptArray = [];
+let attemptList = '';
 
-
+// This makes the arrays.
 function makeArrays(){
-// for(i=0, i<word.length, i++){
-  // let a = str.charAt(i);
-  // wordArray[i] = a;
-// };
 let i = 0;
 while(i<word.length){
   let a = word.charAt(i);
@@ -90,7 +88,7 @@ console.log(blankArray);
 console.log("wordAndBlank: " + wordAndBlank);
 };
 
-
+// This checks to see if the letter is in the word.
 function checkLetter(letter){
 console.log("Letter in checkLetter: " + letter);
 let i = 0;
@@ -102,7 +100,10 @@ letterInside = 0;
      }
      i++;
    }
+  //  If the letter is not inside.
    if(letterInside === 0){
+     attemptArray.push(letter);
+     attemptList = attemptArray.join(" ");
      guessCount--;
    }
    wordAndBlank = blankArray.join(" ");
@@ -132,7 +133,7 @@ app.post("/guess_game", function (req, res) {
   if(guessCount !== numGuesses){
   if(letter.length > 1 || letter.length === 0){
     console.log("Guess not one character");
-    res.render('gameplay', {blanks: word, count: guessCount});
+    res.render('gameplay', {blanks: word, count: guessCount, attempt: attemptList});
   }
   // If the guess is acceptable.
   else{
@@ -143,7 +144,7 @@ app.post("/guess_game", function (req, res) {
 
 
   console.log("Guesses: " + guessCount);
-  res.render('gameplay', {blanks: wordAndBlank, count: guessCount});
+  res.render('gameplay', {blanks: wordAndBlank, count: guessCount, attempt: attemptList});
   // console.log("Add to count");
   // guessCount--;
   }
@@ -154,7 +155,7 @@ app.post("/guess_game", function (req, res) {
     makeArrays();
     console.log("Word: " + word);
     // console.log("guessCount Initially " + guessCount);
-    res.render('gameplay', {blanks: wordAndBlank, count: guessCount});
+    res.render('gameplay', {blanks: wordAndBlank, count: guessCount, attempt: attemptList});
     // console.log("Add to count");
     guessCount--;
   }
