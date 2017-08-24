@@ -94,6 +94,7 @@ console.log("wordAndBlank: " + wordAndBlank);
 function checkLetter(letter){
 // console.log("Letter in checkLetter: " + letter);
 let i = 0;
+// Replace a blank if the letter is in the word.
 letterInside = 0;
    while(i<word.length){
      if (letter === wordArray[i]){
@@ -103,10 +104,27 @@ letterInside = 0;
      i++;
    }
   //  If the letter is not inside.
+  let previousGuess = false;
+  let o = 0;
    if(letterInside === 0){
+     console.log(letter);
+     console.log(attemptArray[o]);
+     while(o<attemptArray.length){
+       if (letter === attemptArray[o]){
+        previousGuess = true;
+        console.log("previousGuess1: " + previousGuess);
+       }
+       o++;
+     }
+     if(previousGuess){
+      console.log("You guessed the letter: "+letter+" already.");
+     }
+     else{
+     console.log("previousGuess2: " + previousGuess);
      attemptArray.push(letter);
      attemptList = attemptArray.join(" ");
      guessCount--;
+     }
    }
    wordAndBlank = blankArray.join(" ");
    console.log("word: " + word);
