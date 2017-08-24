@@ -58,6 +58,7 @@ let words = fs.readFileSync("/usr/share/dict/words", "utf-8").toLowerCase().spli
 function guessWord(){
   return words[Math.floor(Math.random() * (235886 + 1)) + 0];
 }
+// This sets global variables.
 let word = '';
 const numGuesses = 10;
 let guessCount = numGuesses;
@@ -67,6 +68,7 @@ let wordAndBlank = '';
 let letterInside = 0;
 let attemptArray = [];
 let attemptList = '';
+let newGame = 'true';
 
 // This makes the arrays.
 function makeArrays(){
@@ -111,8 +113,6 @@ letterInside = 0;
 }
 
 
-
-
 // This controls the localhost page.
 app.get("/", function (req, res) {
   // This brings up the index.mustache HTML.
@@ -130,7 +130,10 @@ app.get("/", function (req, res) {
 app.post("/guess_game", function (req, res) {
   // word = 'term3';
   let letter = req.body.guess;
-  if(guessCount !== numGuesses){
+
+  if(newGame === false){
+    console.log(newGame);
+    console.log("Goes to 135");
   if(letter.length > 1 || letter.length === 0){
     console.log("Guess not one character");
     res.render('gameplay', {blanks: word, count: guessCount, attempt: attemptList});
@@ -157,7 +160,8 @@ app.post("/guess_game", function (req, res) {
     // console.log("guessCount Initially " + guessCount);
     res.render('gameplay', {blanks: wordAndBlank, count: guessCount, attempt: attemptList});
     // console.log("Add to count");
-    guessCount--;
+    newGame = false;
+    // guessCount--;
   }
   // res.redirect('/gameplay');
 });
