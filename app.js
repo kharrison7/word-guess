@@ -65,7 +65,6 @@ let guessCount = numGuesses;
 let wordArray = [];
 let blankArray = [];
 let wordAndBlank = '';
-let letterInside = 0;
 let attemptArray = [];
 let attemptList = '';
 let newGame = 'true';
@@ -95,7 +94,7 @@ function checkLetter(letter){
 // console.log("Letter in checkLetter: " + letter);
 let i = 0;
 // Replace a blank if the letter is in the word.
-letterInside = 0;
+let letterInside = 0;
    while(i<word.length){
      if (letter === wordArray[i]){
        blankArray[i] = letter;
@@ -112,7 +111,6 @@ letterInside = 0;
      while(o<attemptArray.length){
        if (letter === attemptArray[o]){
         previousGuess = true;
-        console.log("previousGuess1: " + previousGuess);
        }
        o++;
      }
@@ -120,12 +118,26 @@ letterInside = 0;
       console.log("You guessed the letter: "+letter+" already.");
      }
      else{
-     console.log("previousGuess2: " + previousGuess);
      attemptArray.push(letter);
      attemptList = attemptArray.join(" ");
      guessCount--;
      }
    }
+
+     //  This checks for a win.
+     if(letterInside > 0){
+       let p = 0;
+       let lettersCorrect = 0;
+       while(p<word.length){
+         if (blankArray[p] === wordArray[p]){
+           lettersCorrect++;
+         }
+         p++;
+       }
+       if( lettersCorrect = word.length){
+         console.log("WIN!");
+       }
+      }
    wordAndBlank = blankArray.join(" ");
    console.log("word: " + word);
    console.log("Letter: " + letter);
