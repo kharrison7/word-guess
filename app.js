@@ -121,6 +121,10 @@ let letterInside = 0;
      attemptArray.push(letter);
      attemptList = attemptArray.join(" ");
      guessCount--;
+    //  This checks to see if the user ran out of guesses.
+     if(guessCount=0){
+       console.log("Game Over");
+     }
      }
    }
 
