@@ -151,6 +151,7 @@ app.post("/guess_game", function (req, res) {
   // word = 'term3';
   let letter = req.body.guess;
   if(newGame === false){
+    letter = letter.toLowerCase();
     // console.log(newGame);
   if(letter.length > 1 || letter.length === 0){
     console.log("Guess not one character");
