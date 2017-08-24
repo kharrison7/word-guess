@@ -92,7 +92,7 @@ console.log("wordAndBlank: " + wordAndBlank);
 
 // This checks to see if the letter is in the word.
 function checkLetter(letter){
-console.log("Letter in checkLetter: " + letter);
+// console.log("Letter in checkLetter: " + letter);
 let i = 0;
 letterInside = 0;
    while(i<word.length){
@@ -109,6 +109,8 @@ letterInside = 0;
      guessCount--;
    }
    wordAndBlank = blankArray.join(" ");
+   console.log("word: " + word);
+   console.log("Letter: " + letter);
    console.log("wordAndBlank: " + wordAndBlank);
 }
 
@@ -130,40 +132,30 @@ app.get("/", function (req, res) {
 app.post("/guess_game", function (req, res) {
   // word = 'term3';
   let letter = req.body.guess;
-
   if(newGame === false){
-    console.log(newGame);
-    console.log("Goes to 135");
+    // console.log(newGame);
   if(letter.length > 1 || letter.length === 0){
     console.log("Guess not one character");
-    res.render('gameplay', {blanks: word, count: guessCount, attempt: attemptList});
+    res.render('gameplay', {blanks: wordAndBlank, count: guessCount, attempt: attemptList});
   }
   // If the guess is acceptable.
   else{
-  console.log("Letter Guessed: " + letter);
-  console.log("Letters.length: " + letter.length)
+  // console.log("Letter Guessed: " + letter);
+  // console.log("Letters.length: " + letter.length)
   checkLetter(letter);
-  // console.log("WordArray: " + wordArray);
-
-
-  console.log("Guesses: " + guessCount);
+  // console.log("Guesses Left: " + guessCount);
   res.render('gameplay', {blanks: wordAndBlank, count: guessCount, attempt: attemptList});
-  // console.log("Add to count");
-  // guessCount--;
   }
   }
   // If this is the first run through do the following.
   else{
     word = guessWord();
     makeArrays();
-    console.log("Word: " + word);
+    // console.log("Word: " + word);
     // console.log("guessCount Initially " + guessCount);
     res.render('gameplay', {blanks: wordAndBlank, count: guessCount, attempt: attemptList});
-    // console.log("Add to count");
     newGame = false;
-    // guessCount--;
   }
-  // res.redirect('/gameplay');
 });
 
 // This brings up the gameplay page.
