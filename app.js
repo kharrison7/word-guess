@@ -58,17 +58,45 @@ console.log(words.length);
 function guessWord(){
   return words[Math.floor(Math.random() * (235886 + 1)) + 0];
 }
-let word = guessWord();
-console.log("Word: " + word);
+let word = '';
+let guessCount = 0;
+let wordArray = [];
+let blankArray = [];
+let wordAndBlank = '';
+
+
+function makeArrays(){
+// for(i=0, i<word.length, i++){
+  // let a = str.charAt(i);
+  // wordArray[i] = a;
+// };
+let i =0;
+while(i<word.length){
+  let a = word.charAt(i);
+  wordArray[i] = a;
+  i++;
+}
+i =0;
+while(i<word.length){
+  let a = word.charAt(i);
+  blankArray[i] = "_";
+  i++;
+}
+
+wordAndBlank = blankArray.join(" ");
+console.log(wordArray);
+console.log(blankArray);
+console.log("wordAndBlank: " + wordAndBlank);
+
+};
 
 
 // This controls the localhost page.
 app.get("/", function (req, res) {
   // This brings up the index.mustache HTML.
+  guessCount = 0;
   res.render('index');
 });
-
-let guessCount = 0;
 
 
 // This is called by submitting the form on the index page
@@ -81,19 +109,28 @@ app.post("/guess_game", function (req, res) {
     console.log("Guess not one character");
     res.render('gameplay', {blanks: word, count: guessCount});
   }
+  // If the guess is acceptable.
   else{
   console.log("Letter Guessed: " + letter);
   console.log("Letters.length: " + letter.length)
+
+  // console.log("WordArray: " + wordArray);
+
+
   console.log("Guesses: " + guessCount);
-  res.render('gameplay', {blanks: word, count: guessCount});
-  console.log("Add to count");
+  res.render('gameplay', {blanks: wordAndBlank, count: guessCount});
+  // console.log("Add to count");
   guessCount++;
   }
   }
+  // If this is the first run through do the following.
   else{
-    console.log("guessCount Initially " + guessCount);
-    res.render('gameplay', {blanks: word, count: guessCount});
-    console.log("Add to count");
+    word = guessWord();
+    makeArrays();
+    console.log("Word: " + word);
+    // console.log("guessCount Initially " + guessCount);
+    res.render('gameplay', {blanks: wordAndBlank, count: guessCount});
+    // console.log("Add to count");
     guessCount++;
   }
   // res.redirect('/gameplay');

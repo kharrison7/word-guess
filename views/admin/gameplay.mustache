@@ -9,7 +9,7 @@
      <form action="/guess_game" method="post">
            <p>Word Guess: {{blanks}}</p>
            <p>Guesses Remaining: {{count}}</p>
-           <input type="text" name="guess" placeholder="Guess a letter..." />
+           <input type="text" name="guess" placeholder="Guess a letter..." maxlength="1" />
            <button type="submit">Submit Guess</button>
       </form>
   <script type="text/javascript" src="javascripts/main.js"></script>
