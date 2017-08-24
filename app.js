@@ -53,7 +53,7 @@ app.use(session({
 
 // This obtains an array of words from a dictionary.
 let words = fs.readFileSync("/usr/share/dict/words", "utf-8").toLowerCase().split("\n");
-console.log(words.length);
+// console.log(words.length);
 // This generates a random word.
 function guessWord(){
   return words[Math.floor(Math.random() * (235886 + 1)) + 0];
@@ -70,25 +70,40 @@ function makeArrays(){
   // let a = str.charAt(i);
   // wordArray[i] = a;
 // };
-let i =0;
+let i = 0;
 while(i<word.length){
   let a = word.charAt(i);
   wordArray[i] = a;
   i++;
 }
-i =0;
+i = 0;
 while(i<word.length){
   let a = word.charAt(i);
   blankArray[i] = "_";
   i++;
 }
-
 wordAndBlank = blankArray.join(" ");
 console.log(wordArray);
 console.log(blankArray);
 console.log("wordAndBlank: " + wordAndBlank);
-
 };
+
+
+function checkLetter(letter){
+console.log("Letter in checkLetter: " + letter);
+let i = 0;
+   while(i<word.length){
+     if (letter === wordArray[i]){
+       blankArray[i] = letter;
+     }
+     i++;
+   }
+   wordAndBlank = blankArray.join(" ");
+   console.log("wordAndBlank: " + wordAndBlank);
+
+}
+
+
 
 
 // This controls the localhost page.
@@ -113,7 +128,7 @@ app.post("/guess_game", function (req, res) {
   else{
   console.log("Letter Guessed: " + letter);
   console.log("Letters.length: " + letter.length)
-
+  checkLetter(letter);
   // console.log("WordArray: " + wordArray);
 
 
