@@ -57,9 +57,35 @@ app.use(session({
 let words = fs.readFileSync("/usr/share/dict/words", "utf-8").toLowerCase().split("\n");
 // console.log(words.length);
 // This generates a random word.
-function guessWord(){
-  return words[Math.floor(Math.random() * (235886 + 1)) + 0];
+function guessWord(difficulty){
+    let sizeMin = 3;
+    let sizeMax = 30;
+    if(difficulty==="easy"){
+      sizeMin = 4;
+      sizeMax = 6;
+    }
+    if(difficulty==="normal"){
+      sizeMin = 6;
+      sizeMax = 8;
+    }
+    if(difficulty==="hard"){
+      sizeMin = 8;
+      sizeMax = 20;
+      guessCount = 8;
+    }
+    if(difficulty==="hardcore"){
+      sizeMin = 10;
+      sizeMax = 50;
+      guessCount = 6;
+    }
+
+  word = words[Math.floor(Math.random() * (235886 + 1)) + 0];
+  while(word.length<sizeMin||word.length>sizeMax){
+    word = words[Math.floor(Math.random() * (235886 + 1)) + 0];
+  }
+return word;
 }
+
 // This sets global variables.
 let word = '';
 const numGuesses = 10;
@@ -72,6 +98,7 @@ let attemptList = '';
 let newGame = 'true';
 let end = '';
 let submit = 'Submit Guess';
+let difficulty = 'easy';
 
 // This makes the arrays.
 function makeArrays(){
@@ -208,7 +235,8 @@ app.post("/guess_game", function (req, res) {
 
   // If this is the first run through do the following.
   else{
-    word = guessWord();
+    difficulty = req.body.difficulty;
+    word = guessWord(difficulty);
     // console.log("req.session.word: " + req.session.word);
     makeArrays();
     // console.log("Word: " + word);
