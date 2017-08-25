@@ -158,7 +158,13 @@ let letterInside = 0;
      if(guessCount===0){
        console.log("Game Over");
        end = "Game Over";
-     }
+         //  This fills in the missing letters.
+             i = 0;
+             while(i<word.length){
+              blankArray[i] = wordArray[i];
+              i++;
+             }
+       }
      }
    }
 
