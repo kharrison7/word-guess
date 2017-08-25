@@ -94,8 +94,8 @@ console.log("wordAndBlank: " + wordAndBlank);
 // This checks to see if the letter is in the word.
 function checkLetter(letter){
 // console.log("Letter in checkLetter: " + letter);
-let i = 0;
 // Replace a blank if the letter is in the word.
+let i = 0;
 let letterInside = 0;
    while(i<word.length){
      if (letter === wordArray[i]){
@@ -104,18 +104,21 @@ let letterInside = 0;
      }
      i++;
    }
+   console.log("Letter: "+letter+" found: "+letterInside+" times.");
   //  If the letter is not inside.
   let previousGuess = false;
   let o = 0;
    if(letterInside === 0){
-     console.log(letter);
-     console.log(attemptArray[o]);
+     console.log("Letter not in word: "+letter);
+     console.log("Attempts: "+attemptArray[o]);
      while(o<attemptArray.length){
        if (letter === attemptArray[o]){
+        console.log("Previously");
         previousGuess = true;
        }
        o++;
      }
+    //  If you have guessed the letter previously.
      if(previousGuess){
       console.log("You guessed the letter: "+letter+" already.");
      }
@@ -124,7 +127,7 @@ let letterInside = 0;
      attemptList = attemptArray.join(" ");
      guessCount--;
     //  This checks to see if the user ran out of guesses.
-     if(guessCount=0){
+     if(guessCount===0){
        console.log("Game Over");
      }
      }
@@ -145,21 +148,13 @@ let letterInside = 0;
        }
       }
    wordAndBlank = blankArray.join(" ");
-   console.log("word: " + word);
-   console.log("Letter: " + letter);
-   console.log("wordAndBlank: " + wordAndBlank);
+  //  console.log("word: " + word);
+  //  console.log("Letter: " + letter);
+  //  console.log("wordAndBlank: " + wordAndBlank);
 }
-
 
 // This controls the localhost page.
 app.get("/", function (req, res) {
-  // This brings up the index.mustache HTML.
-  // guessCount = numGuesses;
-  // word = '';
-  // wordArray = [];
-  // blankArray = [];
-  // wordAndBlank = '';
-  // res.render('index');
   res.redirect('/index');
 });
 
@@ -175,17 +170,13 @@ app.get('/index', function(req, res){
   res.render('index')
 })
 
-
 // This is called by submitting the form on the index page
 // This is called by submitting the form on the gameplay page.
 app.post("/guess_game", function (req, res) {
-  // word = 'term3';
-  console.log("req.session.word: " + req.session.word);
-  console.log("req.session: " + req.session);
   let letter = req.body.guess;
+  // For all turns after the pafe loads.
   if(newGame === false){
-    letter = letter.toLowerCase();
-    // console.log(newGame);
+  letter = letter.toLowerCase();
   if(letter.length > 1 || letter.length === 0){
     console.log("Guess not one character");
     res.render('gameplay', {blanks: wordAndBlank, count: guessCount, attempt: attemptList});
@@ -193,20 +184,26 @@ app.post("/guess_game", function (req, res) {
   // If the guess is acceptable.
   else{
   // console.log("Letter Guessed: " + letter);
-  // console.log("Letters.length: " + letter.length)
   checkLetter(letter);
   // console.log("Guesses Left: " + guessCount);
+  req.session.guessCount = guessCount;
+  req.session.attemptList = attemptList;
+  console.log("req.session.word: "+req.session.word+", guessCount: "+req.session.guessCount+", attempts: "+req.session.attemptList);
   res.render('gameplay', {blanks: wordAndBlank, count: guessCount, attempt: attemptList});
   }
   }
+
   // If this is the first run through do the following.
   else{
     word = guessWord();
-    req.session.word = word;
-    console.log("req.session.word: " + req.session.word);
+    // console.log("req.session.word: " + req.session.word);
     makeArrays();
     // console.log("Word: " + word);
     // console.log("guessCount Initially " + guessCount);
+    req.session.word = word;
+    req.session.guessCount = guessCount;
+    req.session.attemptList = attemptList;
+    console.log("req.session.word: "+req.session.word+", guessCount: "+req.session.guessCount+", attempts: "+req.session.attemptList);
     res.render('gameplay', {blanks: wordAndBlank, count: guessCount, attempt: attemptList});
     newGame = false;
   }
@@ -219,16 +216,10 @@ app.get("/gameplay", function (req, res) {
   res.render('gameplay', {blanks: word, count: guessCount});
 });
 
-
-
-
-
-
-
-
 // This ties the file to the proper localhost.
 app.listen(3000, function(){
   console.log('Started express application!')
 });
 
+// In case I want to export something later.
 module.exports = app;
