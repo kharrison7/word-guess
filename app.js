@@ -76,7 +76,7 @@ function guessWord(difficulty){
     if(difficulty==="hardcore"){
       sizeMin = 10;
       sizeMax = 50;
-      guessCount = 6;
+      guessCount = 2;
     }
 
   word = words[Math.floor(Math.random() * (235886 + 1)) + 0];
@@ -161,7 +161,11 @@ let letterInside = 0;
          //  This fills in the missing letters.
              i = 0;
              while(i<word.length){
-              blankArray[i] = wordArray[i];
+              if(blankArray[i] === "_") {
+                let a = wordArray[i].toUpperCase();
+                blankArray[i] = a;
+              }
+              // blankArray[i] = wordArray[i];
               i++;
              }
        }
