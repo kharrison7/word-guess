@@ -146,7 +146,7 @@ let letterInside = 0;
        }
        if( lettersCorrect === word.length ){
          console.log("WIN!");
-         end = "Win";
+         end = "You Won";
        }
       }
    wordAndBlank = blankArray.join(" ");
@@ -176,6 +176,11 @@ app.get('/index', function(req, res){
 // This is called by submitting the form on the index page
 // This is called by submitting the form on the gameplay page.
 app.post("/guess_game", function (req, res) {
+  // If the game is over:
+  if(end  !== ""){
+    console.log('Go back to index');
+    res.redirect('/');
+  } else{
   let letter = req.body.guess;
   // For all turns after the pafe loads.
   if(newGame === false){
@@ -209,6 +214,7 @@ app.post("/guess_game", function (req, res) {
     console.log("req.session.word: "+req.session.word+", guessCount: "+req.session.guessCount+", attempts: "+req.session.attemptList);
     res.render('gameplay', {blanks: wordAndBlank, count: guessCount, attempt: attemptList});
     newGame = false;
+  }
   }
 });
 
