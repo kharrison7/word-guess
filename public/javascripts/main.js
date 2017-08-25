@@ -9,10 +9,8 @@ let finishedWord = [];
       // The numbers are the unicode for capital letters. charCodeAt gives unicode.
         if(text1[i].charCodeAt(text1[i]) >= 65 && text1[i].charCodeAt(text1[i]) <= 90){
           console.log("Capital: "+text1[i]);
-          // text1[i].setAttribute("class", "capital");
           finishedWord[i] = `<span class='capital'>${text1[i]}</span>`;
           console.log("Html is: "+finishedWord[i]);
-          // document.getElementById("wordGuess").innerHTML = `<span class='capital'>${text1[i]}</span>`;
         }
         // If the letter isn't capitalized.
         else{

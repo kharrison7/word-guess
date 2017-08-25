@@ -76,7 +76,7 @@ function guessWord(difficulty){
     if(difficulty==="hardcore"){
       sizeMin = 10;
       sizeMax = 50;
-      guessCount = 2;
+      guessCount = 6;
     }
 
   word = words[Math.floor(Math.random() * (235886 + 1)) + 0];
