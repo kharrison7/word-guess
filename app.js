@@ -70,6 +70,7 @@ let wordAndBlank = '';
 let attemptArray = [];
 let attemptList = '';
 let newGame = 'true';
+let end = '';
 
 // This makes the arrays.
 function makeArrays(){
@@ -128,6 +129,7 @@ let letterInside = 0;
     //  This checks to see if the user ran out of guesses.
      if(guessCount===0){
        console.log("Game Over");
+       end = "Game Over";
      }
      }
    }
@@ -144,6 +146,7 @@ let letterInside = 0;
        }
        if( lettersCorrect === word.length ){
          console.log("WIN!");
+         end = "Win";
        }
       }
    wordAndBlank = blankArray.join(" ");
@@ -166,6 +169,7 @@ app.get('/index', function(req, res){
   attemptArray = [];
   attemptList = '';
   newGame = 'true';
+  end = '';
   res.render('index')
 })
 
@@ -188,7 +192,7 @@ app.post("/guess_game", function (req, res) {
   req.session.guessCount = guessCount;
   req.session.attemptList = attemptList;
   console.log("req.session.word: "+req.session.word+", guessCount: "+req.session.guessCount+", attempts: "+req.session.attemptList);
-  res.render('gameplay', {blanks: wordAndBlank, count: guessCount, attempt: attemptList});
+  res.render('gameplay', {blanks: wordAndBlank, count: guessCount, attempt: attemptList, end: end});
   }
   }
 
