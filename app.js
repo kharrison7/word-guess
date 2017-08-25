@@ -1,13 +1,14 @@
 //app.js code here.
 // runs at http://localhost:3000/
 // This requires all the modules and files.
-let express = require('express');
+const express = require('express');
 const path = require('path');
-let bodyParser = require('body-parser');
+const bodyParser = require('body-parser');
 const mustacheExpress = require('mustache-express');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+const expressValidator = require('express-validator');
 const adminRouter = require('./public/routes/admin');
 const gameRouter = require('./public/routes/gameplay');
 // const data = require('./items.js');
@@ -19,13 +20,14 @@ const fs = require('fs');
 // Create authorization session
 let authorizedSession = "";
 // Create app
-let app = express();
+const app = express();
 // Set app to use bodyParser() middleware.
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.text());
+app.use(expressValidator());
 // This consolelogs a buch of actions
-app.use(logger('dev'));
+// app.use(logger('dev'));
 app.use(cookieParser());
 // Sets the view engine and router.
 app.engine('mustache', mustacheExpress());
@@ -132,13 +134,13 @@ let letterInside = 0;
      if(letterInside > 0){
        let p = 0;
        let lettersCorrect = 0;
-       while(p<word.length){
+       while(p<word.length ){
          if (blankArray[p] === wordArray[p]){
            lettersCorrect++;
          }
          p++;
        }
-       if( lettersCorrect = word.length){
+       if( lettersCorrect = word.length ){
          console.log("WIN!");
        }
       }
@@ -157,14 +159,29 @@ app.get("/", function (req, res) {
   // wordArray = [];
   // blankArray = [];
   // wordAndBlank = '';
-  res.render('index');
+  // res.render('index');
+  res.redirect('/index');
 });
+
+app.get('/index', function(req, res){
+  word = '';
+  guessCount = numGuesses;
+  wordArray = [];
+  blankArray = [];
+  wordAndBlank = '';
+  attemptArray = [];
+  attemptList = '';
+  newGame = 'true';
+  res.render('index')
+})
 
 
 // This is called by submitting the form on the index page
 // This is called by submitting the form on the gameplay page.
 app.post("/guess_game", function (req, res) {
   // word = 'term3';
+  console.log("req.session.word: " + req.session.word);
+  console.log("req.session: " + req.session);
   let letter = req.body.guess;
   if(newGame === false){
     letter = letter.toLowerCase();
@@ -185,6 +202,8 @@ app.post("/guess_game", function (req, res) {
   // If this is the first run through do the following.
   else{
     word = guessWord();
+    req.session.word = word;
+    console.log("req.session.word: " + req.session.word);
     makeArrays();
     // console.log("Word: " + word);
     // console.log("guessCount Initially " + guessCount);
@@ -211,3 +230,5 @@ app.get("/gameplay", function (req, res) {
 app.listen(3000, function(){
   console.log('Started express application!')
 });
+
+module.exports = app;
