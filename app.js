@@ -71,6 +71,7 @@ let attemptArray = [];
 let attemptList = '';
 let newGame = 'true';
 let end = '';
+let submit = 'Submit Guess';
 
 // This makes the arrays.
 function makeArrays(){
@@ -170,13 +171,14 @@ app.get('/index', function(req, res){
   attemptList = '';
   newGame = 'true';
   end = '';
+  submit = 'Submit Guess';
   res.render('index')
 })
 
 // This is called by submitting the form on the index page
 // This is called by submitting the form on the gameplay page.
 app.post("/guess_game", function (req, res) {
-  // If the game is over:
+  // If the game is over and the button is clicked:
   if(end  !== ""){
     console.log('Go back to index');
     res.redirect('/');
@@ -187,17 +189,20 @@ app.post("/guess_game", function (req, res) {
   letter = letter.toLowerCase();
   if(letter.length > 1 || letter.length === 0){
     console.log("Guess not one character");
-    res.render('gameplay', {blanks: wordAndBlank, count: guessCount, attempt: attemptList});
+    res.render('gameplay', {blanks: wordAndBlank, count: guessCount, attempt: attemptList, submit: submit});
   }
   // If the guess is acceptable.
   else{
   // console.log("Letter Guessed: " + letter);
   checkLetter(letter);
   // console.log("Guesses Left: " + guessCount);
+  if(end  !== ""){
+    submit = "Back to Menu";
+  }
   req.session.guessCount = guessCount;
   req.session.attemptList = attemptList;
   console.log("req.session.word: "+req.session.word+", guessCount: "+req.session.guessCount+", attempts: "+req.session.attemptList);
-  res.render('gameplay', {blanks: wordAndBlank, count: guessCount, attempt: attemptList, end: end});
+  res.render('gameplay', {blanks: wordAndBlank, count: guessCount, attempt: attemptList, end: end, submit: submit});
   }
   }
 
@@ -212,7 +217,7 @@ app.post("/guess_game", function (req, res) {
     req.session.guessCount = guessCount;
     req.session.attemptList = attemptList;
     console.log("req.session.word: "+req.session.word+", guessCount: "+req.session.guessCount+", attempts: "+req.session.attemptList);
-    res.render('gameplay', {blanks: wordAndBlank, count: guessCount, attempt: attemptList});
+    res.render('gameplay', {blanks: wordAndBlank, count: guessCount, attempt: attemptList, end: end, submit: submit});
     newGame = false;
   }
   }
