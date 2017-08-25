@@ -8,7 +8,7 @@
 <body>
      <form action="/guess_game" method="post">
            <h2>{{end}}</h2>
-           <p id="wordGuess">Word Guess: {{blanks}}</p>
+           <p>Word Guess: </p><p id="wordGuess">{{blanks}}</p>
            <p>Guesses Remaining: {{count}}</p>
            <p>Letters Guessed: {{attempt}}</p>
            <input type="text" name="guess" placeholder="Guess a letter..." maxlength="1" />
