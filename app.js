@@ -168,6 +168,7 @@ let letterInside = 0;
               // blankArray[i] = wordArray[i];
               i++;
              }
+             
        }
      }
    }
