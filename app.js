@@ -113,7 +113,6 @@ let letterInside = 0;
      console.log("Attempts: "+attemptArray[o]);
      while(o<attemptArray.length){
        if (letter === attemptArray[o]){
-        console.log("Previously");
         previousGuess = true;
        }
        o++;
@@ -143,7 +142,7 @@ let letterInside = 0;
          }
          p++;
        }
-       if( lettersCorrect = word.length ){
+       if( lettersCorrect === word.length ){
          console.log("WIN!");
        }
       }
