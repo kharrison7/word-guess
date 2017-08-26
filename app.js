@@ -99,6 +99,7 @@ let newGame = 'true';
 let end = '';
 let submit = 'Submit Guess';
 let difficulty = 'easy';
+let message ="";
 
 // This makes the arrays.
 function makeArrays(){
@@ -148,7 +149,8 @@ let letterInside = 0;
      }
     //  If you have guessed the letter previously.
      if(previousGuess){
-      console.log("You guessed the letter: "+letter+" already.");
+      // console.log("You guessed the letter: "+letter+" already.");
+      message = "You guessed the letter: "+letter+" already."
      }
      else{
      attemptArray.push(letter);
@@ -210,6 +212,7 @@ app.get('/index', function(req, res){
   newGame = 'true';
   end = '';
   submit = 'Submit Guess';
+  message = "";
   res.render('index')
 })
 
@@ -222,6 +225,7 @@ app.post("/guess_game", function (req, res) {
     res.redirect('/');
   } else{
   let letter = req.body.guess;
+  message = "";
   // For all turns after the pafe loads.
   if(newGame === false){
   letter = letter.toLowerCase();
@@ -240,7 +244,7 @@ app.post("/guess_game", function (req, res) {
   req.session.guessCount = guessCount;
   req.session.attemptList = attemptList;
   console.log("req.session.word: "+req.session.word+", guessCount: "+req.session.guessCount+", attempts: "+req.session.attemptList);
-  res.render('gameplay', {blanks: wordAndBlank, count: guessCount, attempt: attemptList, end: end, submit: submit});
+  res.render('gameplay', {blanks: wordAndBlank, count: guessCount, attempt: attemptList, end: end, submit: submit, message: message});
   }
   }
 
