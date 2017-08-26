@@ -123,12 +123,14 @@ console.log("wordAndBlank: " + wordAndBlank);
 
 // This checks to see if the letter is in the word.
 function checkLetter(letter){
-// console.log("Letter in checkLetter: " + letter);
 // Replace a blank if the letter is in the word.
 let i = 0;
 let letterInside = 0;
    while(i<word.length){
      if (letter === wordArray[i]){
+       if(blankArray[i] === letter){
+         message = "The letter "+letter+" was added already. Try a different letter."
+       }
        blankArray[i] = letter;
        letterInside++;
      }
@@ -150,7 +152,7 @@ let letterInside = 0;
     //  If you have guessed the letter previously.
      if(previousGuess){
       // console.log("You guessed the letter: "+letter+" already.");
-      message = "You guessed the letter: "+letter+" already."
+      message = "You guessed the letter "+letter+" already. Try a different letter."
      }
      else{
      attemptArray.push(letter);
