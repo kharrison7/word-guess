@@ -11,7 +11,7 @@
            <p>Word Guess: </p><p id="wordGuess">{{blanks}}</p>
            <p>Guesses Remaining: {{count}}</p>
            <p>Letters Guessed: {{attempt}}</p>
-           <input type="text" name="guess" placeholder="Guess a letter..." maxlength="1" />
+           <input type="text" name="guess" placeholder="Guess a letter..." maxlength="1" pattern="[A-Za-z]"/>
            <button type="submit">{{submit}}</button>
       </form>
            <div>

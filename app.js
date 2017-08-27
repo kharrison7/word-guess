@@ -272,7 +272,9 @@ app.post("/guess_game", function (req, res) {
 app.get("/gameplay", function (req, res) {
   // word = 'term2';
   console.log("Prior to render.");
-  res.render('gameplay', {blanks: word, count: guessCount});
+  submit = "Begin a New Game.";
+  message = "Click above to begin a new game.";
+  res.render('gameplay', {blanks: word, count: guessCount, submit: submit, message: message});
 });
 
 // This ties the file to the proper localhost.
