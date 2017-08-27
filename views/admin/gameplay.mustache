@@ -6,12 +6,16 @@
      <link rel="stylesheet" type="text/css" href="/stylesheets/styles.css" />
    </head>
 <body>
-     <form action="/guess_game" method="post">
+     <form action="/guess_game" method="post" name="myForm">
            <h2>{{end}}</h2>
            <p>Word Guess: </p><p id="wordGuess">{{blanks}}</p>
            <p>Guesses Remaining: {{count}}</p>
            <p>Letters Guessed: {{attempt}}</p>
-           <input type="text" name="guess" placeholder="Guess a letter..." maxlength="1" pattern="[A-Za-z]"/>
+           <!-- pattern="[A-Za-z]" -->
+           <input type="text" name="guess" id="item" placeholder="Guess a letter..." maxlength="1"
+           pattern="[A-Za-z]+"
+           oninvalid="setCustomValidity('Please enter a letter')"
+           onchange="try{setCustomValidity('')}catch(e){}" />
            <button type="submit">{{submit}}</button>
       </form>
            <div>

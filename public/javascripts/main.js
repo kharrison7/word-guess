@@ -22,3 +22,18 @@ let finishedWord = [];
       document.getElementById("wordGuess").innerHTML = total;
    }
 wrapCaps();
+
+// The following was an attempt to validate the input.
+// This gives a custom error message if a non-letter character is inputted.
+let anInput = document.getElementById("item");
+let letterCheck = document.forms["myForm"]["guess"].value;
+
+anInput.addEventListener("input", function (event) {
+  console.log("Event Listened: "+letterCheck);
+  // All letters A through z.
+  let compare=/^[a-zA-Z]+$/;
+      if (letterCheck.match(compare)){
+        alert("Must input a letter");
+       return false;
+      }
+});
