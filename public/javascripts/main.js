@@ -29,6 +29,7 @@ let anInput = document.getElementById("item");
 let letterCheck = document.forms["myForm"]["guess"].value;
 
 anInput.addEventListener("input", function (event) {
+  // WHile the attribute is added, letterCheck always remains empty.
   console.log("Event Listened: "+letterCheck);
   // All letters A through z.
   let compare=/^[a-zA-Z]+$/;

@@ -8,9 +8,11 @@ const mustacheExpress = require('mustache-express');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+const http = require('http');
 const expressValidator = require('express-validator');
 const adminRouter = require('./public/routes/admin');
 const gameRouter = require('./public/routes/gameplay');
+const validation = require('./test/validation/checkVal.js');
 // const data = require('./items.js');
 // const userJS = require('./user.js');
 const file = './fill.json';
@@ -25,7 +27,11 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.text());
+//'extended: false' parses strings and arrays.
+//'extended: true' parses nested objects
+//'expressValidator' must come after 'bodyParser', since data must be parsed first!
 app.use(expressValidator());
+
 // This consolelogs a buch of actions
 // app.use(logger('dev'));
 app.use(cookieParser());
@@ -45,7 +51,9 @@ app.use(express.static(__dirname + '/public'));
 // This sets up the session.
 app.use(session({
   secret: 'variant',
+  // only save if user changes something.
   resave: false,
+  // set to determine save to sessions.
   saveUninitialized: true
 }));
 
@@ -220,17 +228,46 @@ app.get('/index', function(req, res){
 
 // This is called by submitting the form on the index page
 // This is called by submitting the form on the gameplay page.
+
+// validate(validation.checkVal)
 app.post("/guess_game", function (req, res) {
+  //Call req.checkBody function.
+
+
+
   // If the game is over and the button is clicked:
   if(end  !== ""){
     console.log('Go back to index');
     res.redirect('/');
   } else{
+  // This obtains the letter from the guess.
   let letter = req.body.guess;
   message = "";
-  // For all turns after the pafe loads.
+  // For all turns after the page loads.
   if(newGame === false){
+  // Converts capital letters to lowercase.
   letter = letter.toLowerCase();
+
+
+// use validation to check for one letter, not numbers or symbols - return error
+//Pass inputs to validate.
+//Tell middleware which validators to apply (chain one or more).
+req.checkBody('guess', 'Must be only one letter').len(1,1);
+req.checkBody('guess', 'Must be a letter').isAlpha();
+// req.checkBody('letter', 'Must not be a number').isNaN();
+// req.checkBody('letter', 'Must not be a symbol').issymbol();not
+   req.getValidationResult().then(function(result){
+     if(!result.isEmpty()){
+     console.log(result.isEmpty());
+     // console.log(result.array());
+     // console.log(result.mapped());
+     // console.log(result.array()[0].msg);
+     message = result.array()[0].msg;
+     return;
+     }
+   });
+
+
   if(letter.length > 1 || letter.length === 0){
     console.log("Guess not one character");
     res.render('gameplay', {blanks: wordAndBlank, count: guessCount, attempt: attemptList, submit: submit});
