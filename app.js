@@ -315,9 +315,9 @@ app.get("/gameplay", function (req, res) {
   res.render('gameplay', {blanks: word, count: guessCount, submit: submit, message: message});
 });
 
-// This ties the file to the proper localhost.
-app.listen(3000, function(){
-  console.log('Started express application!')
+// This ties the file to the proper localhost or host.
+app.listen(process.env.PORT || 3000, function () {
+  console.log('Successfully started express application!');
 });
 
 // In case I want to export something later.
