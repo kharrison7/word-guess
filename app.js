@@ -62,7 +62,10 @@ app.use(session({
 // This begins the interesting code:
 
 // This obtains an array of words from a dictionary.
-let words = fs.readFileSync("/usr/share/dict/words", "utf-8").toLowerCase().split("\n");
+// let words = fs.readFileSync("/usr/share/dict/words", "utf-8").toLowerCase().split("\n");
+const dataeasy = require("./data_easy");
+const easywords = dataeasy.words
+
 // console.log(words.length);
 // This generates a random word.
 function guessWord(difficulty){
@@ -71,6 +74,7 @@ function guessWord(difficulty){
     if(difficulty==="easy"){
       sizeMin = 4;
       sizeMax = 6;
+      word=easywords[Math.floor(Math.random() * (easywords.length + 1) )];
     }
     if(difficulty==="normal"){
       sizeMin = 6;
@@ -86,11 +90,11 @@ function guessWord(difficulty){
       sizeMax = 50;
       guessCount = 6;
     }
-
-  word = words[Math.floor(Math.random() * (235886 + 1)) + 0];
-  while(word.length<sizeMin||word.length>sizeMax){
-    word = words[Math.floor(Math.random() * (235886 + 1)) + 0];
-  }
+    word=easywords[Math.floor(Math.random() * (easywords.length + 1) )];
+  // word = words[Math.floor(Math.random() * (235886 + 1)) + 0];
+  // while(word.length<sizeMin||word.length>sizeMax){
+  //   word = words[Math.floor(Math.random() * (235886 + 1)) + 0];
+  // }
 return word;
 }
 
