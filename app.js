@@ -64,7 +64,7 @@ app.use(session({
 // This obtains an array of words from a dictionary.
 // let words = fs.readFileSync("/usr/share/dict/words", "utf-8").toLowerCase().split("\n");
 const dataeasy = require("./data_easy");
-const easywords = dataeasy.words
+const easywords = dataeasy.words;
 
 // console.log(words.length);
 // This generates a random word.
