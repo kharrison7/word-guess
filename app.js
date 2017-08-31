@@ -44,7 +44,7 @@ app.set('view engine', 'mustache');
 // use the correct routes when callled.
 app.use('/admin', adminRouter);
 app.use('/gameplay', gameRouter);
-// fetch static content from public folder.
+// fetch static content from public folder, example css.
 app.use(express.static(__dirname + '/public'));
 
 
@@ -232,9 +232,6 @@ app.get('/index', function(req, res){
 // validate(validation.checkVal)
 app.post("/guess_game", function (req, res) {
   //Call req.checkBody function.
-
-
-
   // If the game is over and the button is clicked:
   if(end  !== ""){
     console.log('Go back to index');
