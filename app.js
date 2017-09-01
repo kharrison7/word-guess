@@ -1,5 +1,6 @@
 //app.js code here.
 // runs at http://localhost:3000/
+// runs at https://word-guess-08-31.herokuapp.com/index
 // This requires all the modules and files.
 const express = require('express');
 const path = require('path');
