@@ -95,6 +95,10 @@ function guessWord(difficulty) {
     guessCount = 6;
   }
   word = easywords[Math.floor(Math.random() * (easywords.length + 1))];
+  while(word.length<sizeMin||word.length>sizeMax){
+    word = easywords[Math.floor(Math.random() * (easywords.length + 1))];
+  };
+
   // word = words[Math.floor(Math.random() * (235886 + 1)) + 0];
   // while(word.length<sizeMin||word.length>sizeMax){
   //   word = words[Math.floor(Math.random() * (235886 + 1)) + 0];
