@@ -99,10 +99,8 @@ function guessWord(difficulty) {
   word = easywords[Math.floor(Math.random() * (easywords.length + 1))];
   while(word.length<sizeMin||word.length>sizeMax){
     word = easywords[Math.floor(Math.random() * (easywords.length + 1))];
-  // word = 'apple';
   };
   if(goUp===true){
-    console.log("Term from Medium Words.");
     word = mediumwords[Math.floor(Math.random() * (mediumwords.length + 1))];
     while(word.length<sizeMin||word.length>sizeMax){
       word = mediumwords[Math.floor(Math.random() * (mediumwords.length + 1))];
@@ -280,7 +278,6 @@ app.post("/guess_game", function(req, res) {
         }
       });
 
-
       if (letter.length > 1 || letter.length === 0) {
         console.log("Guess not one character");
         res.render('gameplay', {
@@ -307,7 +304,8 @@ app.post("/guess_game", function(req, res) {
           attempt: attemptList,
           end: end,
           submit: submit,
-          message: message
+          message: message,
+          word: word
         });
       }
     }
