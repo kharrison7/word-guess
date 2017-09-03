@@ -1,23 +1,25 @@
 <!DOCTYPE html>
- <html>
-   <head>
-     <title>Begin Game</title>
-     <link rel="stylesheet" type="text/css" href="stylesheets/styles.css" />
-     <link rel="stylesheet" type="text/css" href="/stylesheets/styles.css" />
-   </head>
+<html>
+
+<head>
+  <title>Begin Game</title>
+  <link rel="stylesheet" type="text/css" href="stylesheets/styles.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/styles.css" />
+</head>
+
 <body>
-    <form action="/guess_game" method="post">
-      <p>Click below to begin a new game.</p>
-       <br>
-       <label for="difficulty">Please select difficulty</label>
-               <select name="difficulty" id="">
+  <form action="/guess_game" method="post">
+    <p>Click below to begin a new game.</p>
+    <br>
+    <label for="difficulty">Please select difficulty</label>
+    <select name="difficulty" id="">
                    <option value="easy">Easy</option>
                    <option value="normal">Normal</option>
                    <option value="hard">Hard</option>
                    <option value="hardcore">Hard Core</option>
                </select>
-       <br>
-      <button type="submit">Start Game</button>
-    </form>
-    <script type="text/javascript" src="main.js"></script>
+    <br>
+    <button type="submit">Start Game</button>
+  </form>
+  <script type="text/javascript" src="main.js"></script>
 </body>

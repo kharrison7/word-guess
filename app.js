@@ -14,7 +14,11 @@ const expressValidator = require('express-validator');
 const validation = require('./test/validation/checkVal.js');
 // const data = require('./items.js');
 // const userJS = require('./user.js');
-const routes = require('./public/routes/router.js');
+
+
+// const routes = require('./public/routes/router.js');
+
+
 const file = './fill.json';
 const fileTransfer = require('./fill.json');
 // Creates and includes a file system (fs) module
@@ -25,7 +29,9 @@ let authorizedSession = "";
 const app = express();
 // Set app to use bodyParser() middleware.
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.urlencoded({
+  extended: false
+}));
 app.use(bodyParser.text());
 //'extended: false' parses strings and arrays.
 //'extended: true' parses nested objects
@@ -57,7 +63,9 @@ app.use(session({
   cookie: {}
 }));
 
-app.use(routes);
+// app.use(routes);
+
+
 
 // This begins the interesting code:
 // This begins the interesting code:
@@ -97,12 +105,12 @@ function guessWord(difficulty) {
     goUp = true;
   }
   word = easywords[Math.floor(Math.random() * (easywords.length + 1))];
-  while(word.length<sizeMin||word.length>sizeMax){
+  while (word.length < sizeMin || word.length > sizeMax) {
     word = easywords[Math.floor(Math.random() * (easywords.length + 1))];
   };
-  if(goUp===true){
+  if (goUp === true) {
     word = mediumwords[Math.floor(Math.random() * (mediumwords.length + 1))];
-    while(word.length<sizeMin||word.length>sizeMax){
+    while (word.length < sizeMin || word.length > sizeMax) {
       word = mediumwords[Math.floor(Math.random() * (mediumwords.length + 1))];
     };
   }
