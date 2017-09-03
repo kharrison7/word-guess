@@ -11,11 +11,10 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const http = require('http');
 const expressValidator = require('express-validator');
-const adminRouter = require('./public/routes/admin');
-const gameRouter = require('./public/routes/gameplay');
 const validation = require('./test/validation/checkVal.js');
 // const data = require('./items.js');
 // const userJS = require('./user.js');
+const routes = require('./public/routes/router.js');
 const file = './fill.json';
 const fileTransfer = require('./fill.json');
 // Creates and includes a file system (fs) module
@@ -43,8 +42,7 @@ app.set('views', ['./views', './views/admin']);
 // sets mustache as the view engine.
 app.set('view engine', 'mustache');
 // use the correct routes when callled.
-app.use('/admin', adminRouter);
-app.use('/gameplay', gameRouter);
+
 // fetch static content from public folder, example css.
 app.use(express.static(__dirname + '/public'));
 
@@ -59,6 +57,8 @@ app.use(session({
   cookie: {}
 }));
 
+app.use(routes);
+
 // This begins the interesting code:
 // This begins the interesting code:
 // This begins the interesting code:
@@ -67,6 +67,8 @@ app.use(session({
 // let words = fs.readFileSync("/usr/share/dict/words", "utf-8").toLowerCase().split("\n");
 const dataeasy = require("./data_easy");
 const easywords = dataeasy.words;
+const datamedium = require("./data_medium");
+const mediumwords = datamedium.words;
 
 // console.log(words.length);
 // This generates a random word.
