@@ -26,9 +26,7 @@ let authorizedSession = "";
 const app = express();
 // Set app to use bodyParser() middleware.
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({
-  extended: false
-}));
+app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.text());
 //'extended: false' parses strings and arrays.
 //'extended: true' parses nested objects
@@ -36,7 +34,7 @@ app.use(bodyParser.text());
 app.use(expressValidator());
 
 // This consolelogs a buch of actions
-// app.use(logger('dev'));
+app.use(logger('dev'));
 app.use(cookieParser());
 // Sets the view engine and router.
 app.engine('mustache', mustacheExpress());
@@ -235,7 +233,7 @@ app.get('/index', function(req, res) {
   submit = 'Submit Guess';
   message = "";
   res.render('index')
-})
+});
 
 // This is called by submitting the form on the index page
 // This is called by submitting the form on the gameplay page.
