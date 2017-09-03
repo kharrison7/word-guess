@@ -33,7 +33,7 @@ app.use(bodyParser.text());
 app.use(expressValidator());
 
 // This consolelogs a buch of actions
-app.use(logger('dev'));
+// app.use(logger('dev'));
 app.use(cookieParser());
 // Sets the view engine and router.
 app.engine('mustache', mustacheExpress());
@@ -75,10 +75,10 @@ const mediumwords = datamedium.words;
 function guessWord(difficulty) {
   let sizeMin = 3;
   let sizeMax = 30;
+  let goUp = false;
   if (difficulty === "easy") {
     sizeMin = 4;
     sizeMax = 6;
-    word = easywords[Math.floor(Math.random() * (easywords.length + 1))];
   }
   if (difficulty === "normal") {
     sizeMin = 6;
@@ -88,21 +88,26 @@ function guessWord(difficulty) {
     sizeMin = 8;
     sizeMax = 20;
     guessCount = 8;
+    goUp = true;
   }
   if (difficulty === "hardcore") {
     sizeMin = 10;
     sizeMax = 50;
     guessCount = 6;
+    goUp = true;
   }
   word = easywords[Math.floor(Math.random() * (easywords.length + 1))];
   while(word.length<sizeMin||word.length>sizeMax){
     word = easywords[Math.floor(Math.random() * (easywords.length + 1))];
+  // word = 'apple';
   };
-
-  // word = words[Math.floor(Math.random() * (235886 + 1)) + 0];
-  // while(word.length<sizeMin||word.length>sizeMax){
-  //   word = words[Math.floor(Math.random() * (235886 + 1)) + 0];
-  // }
+  if(goUp===true){
+    console.log("Term from Medium Words.");
+    word = mediumwords[Math.floor(Math.random() * (mediumwords.length + 1))];
+    while(word.length<sizeMin||word.length>sizeMax){
+      word = mediumwords[Math.floor(Math.random() * (mediumwords.length + 1))];
+    };
+  }
   return word;
 }
 
