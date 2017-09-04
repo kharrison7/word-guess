@@ -29,6 +29,7 @@ let end = '';
 let submit = 'Submit Guess';
 let difficulty = 'easy';
 let message = "";
+let competitive = false;
 
 // This generates a random word and some arrays.
 const getRandomWord = function guessWord(req, res) {
@@ -45,6 +46,8 @@ const getRandomWord = function guessWord(req, res) {
   req.session.submit = 'Submit Guess';
   req.session.message = "";
   req.session.return = '';
+  req.session.score = 0;
+  req.session.userName = '';
   word = '';
   guessCount = numGuesses;
   wordArray = [];
@@ -56,6 +59,7 @@ const getRandomWord = function guessWord(req, res) {
   end = '';
   submit = 'Submit Guess';
   message = "";
+  competitive = false;
   console.log("Difficulty: "+ req.session.difficulty);
     let difficulty = req.session.difficulty;
     let sizeMin = 3;
@@ -80,6 +84,7 @@ const getRandomWord = function guessWord(req, res) {
       sizeMax = 50;
       req.session.guessCount = 6;
       goUp = true;
+      competitive = true;
     }
     word = easywords[Math.floor(Math.random() * (easywords.length + 1))];
     while (word.length < sizeMin || word.length > sizeMax) {
@@ -109,6 +114,7 @@ const getRandomWord = function guessWord(req, res) {
       req.session.wordAndBlank = wordAndBlank;
       req.session.wordArray = wordArray;
       req.session.blankArray = blankArray;
+      req.session.competitive = competitive;
       console.log(wordArray);
       console.log(blankArray);
       console.log("wordAndBlank: " + wordAndBlank);
@@ -200,6 +206,7 @@ const checkGuess = function (req, res) {
               if (guessCount === 0) {
                 console.log("Game Over");
                 end = "Game Over";
+                competitive = false;
                 //  This fills in the missing letters.
                 i = 0;
                 while (i < word.length) {
@@ -227,6 +234,8 @@ const checkGuess = function (req, res) {
             if (lettersCorrect === word.length) {
               console.log("WIN!");
               end = "You Won";
+              // req.session.score = word.length * (6-req.session.guessCount)*100;
+              req.session.score = 1000*word.length;
             }
           }
           wordAndBlank = blankArray.join(" ");

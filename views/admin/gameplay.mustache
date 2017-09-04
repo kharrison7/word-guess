@@ -14,21 +14,31 @@
     <p id="wordGuess">{{blanks}}</p>
     <p>Guesses Remaining: {{count}}</p>
     <p>Letters Guessed: {{attempt}}</p>
-    <input type="text" name="guess" id="item" placeholder="Guess a letter..." maxlength="1"
-    pattern="[A-Za-z]+"
-    oninvalid="setCustomValidity('Please enter a letter')"
-    onchange="try{setCustomValidity('')}catch(e){}" />
+    <input type="text" name="guess" id="item" placeholder="Guess a letter..." maxlength="1" pattern="[A-Za-z]+" oninvalid="setCustomValidity('Please enter a letter')" onchange="try{setCustomValidity('')}catch(e){}" />
     <button type="submit">{{submit}}</button>
   </form>
   {{#end}}
     <button type="submit" onclick="window.open('https://en.wikipedia.org/wiki/{{word}}', '_blank');">Check out the word "{{word}}" on wikipedia.</button>
     <button type="submit" onclick="window.open('http://www.dictionary.net/{{word}}', '_blank');">Check out the word "{{word}}" on dictionary.net.</button>
+    {{#competitive}}
+    <br />
+    <br />
+    <h2>Post Your Score:</h2>
+    <form action="/submit_score" method="post" name="mySubmitForm">
+      <p>Please input three letters to save with your score.</p>
+      <input type="text" name="userName" id="userNameSubmit" placeholder="Please put in 3 letters" maxlength="3" pattern="[A-Za-z]+" oninvalid="setCustomValidity('Please enter a letter')" onchange="try{setCustomValidity('')}catch(e){}" />
+      <p>Score: {{score}}</p>
+      <button type="submit">Submit Your Score</button>
+    </form>
+    {{/competitive}}
   {{/end}}
   <div>
     <p>{{message}}</p>
   </div>
   {{^end}}
+  {{^competitive}}
   <!-- <button type="submit">Hint</button> -->
+  {{/competitive}}
   {{/end}}
   <script type="text/javascript" src="javascripts/main.js"></script>
 </body>

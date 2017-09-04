@@ -308,3 +308,7 @@ req.getValidationResult().then(function(result) {
     return;
   }
 });
+
+
+// fill.json info:
+// , "userNames":[],"wordGuessed":[],"score":[]

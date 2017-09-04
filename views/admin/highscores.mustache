@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Word Guess</title>
+  <link rel="stylesheet" type="text/css" href="stylesheets/styles.css" />
+  <link rel="stylesheet" type="text/css" href="/stylesheets/styles.css" />
+</head>
+<body>
+  <form action="/" method="post" name="myForm">
+    <h2>High Scores:</h2>
+    <p>Name: {{userNames}}</p>
+    <p>Word: {{word}}</p>
+    <p>Score: {{score}}</p>
+    <table>
+            {{#player}}
+                <tr>
+                  <td>{{name}}</td>
+                  <td>{{word}}</td>
+                  <td>{{score}}
+                </tr>
+            {{/player}}
+    </table>
+    <button type="submit">Back to Index</button>
+  </form>
+  <script type="text/javascript" src="javascripts/main.js"></script>
+</body>
