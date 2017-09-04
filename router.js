@@ -38,6 +38,7 @@ router.get('/',function(req,res){
   req.session.message = "";
   req.session.return = '';
   req.session.userName = '';
+  req.session.score = '';
   res.render('index');
 });
 
@@ -112,10 +113,6 @@ router.post('/submit_score', function (req, res) {
 	res.redirect('/highscores');
 });
 
-
-
-
-
 router.get('/highscores', function (req, res) {
   console.log("high_scores");
   //make scores appear
@@ -136,6 +133,7 @@ router.post('/highscores', function (req, res) {
 });
 
 router.post('/',function(req,res){
+  req.session.userName = '';
   res.redirect('/');
 });
 

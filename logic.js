@@ -206,7 +206,7 @@ const checkGuess = function (req, res) {
               if (guessCount === 0) {
                 console.log("Game Over");
                 end = "Game Over";
-                competitive = false;
+                req.session.competitive = false;
                 //  This fills in the missing letters.
                 i = 0;
                 while (i < word.length) {
@@ -235,7 +235,9 @@ const checkGuess = function (req, res) {
               console.log("WIN!");
               end = "You Won";
               // req.session.score = word.length * (6-req.session.guessCount)*100;
-              req.session.score = 1000*word.length;
+              let mod = req.session.guessCount;
+              req.session.score = 170*mod*word.length;
+              console.log("Score: "+mod+" guessCount: "+req.session.guessCount+" "+req.session.score);
             }
           }
           wordAndBlank = blankArray.join(" ");
