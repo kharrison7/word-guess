@@ -1,198 +1,261 @@
+const express = require('express');
 const session = require('express-session');
 const logic = require('./logic.js');
 const fs = require("fs")
-
 const dataeasy = require("./data_easy");
 const datamedium = require("./data_medium");
 const jsonfile = require('jsonfile');
+const bodyParser = require('body-parser');
+const easywords = dataeasy.words;
+const mediumwords = datamedium.words;
+const app = express();
+const expressValidator = require('express-validator');
 
-const hardwords = fs.readFileSync("./data_hard", "utf-8").toLowerCase().split("\n");
-const easywords = dataeasy.words
-const mediumwords = datamedium.words
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(expressValidator());
 
-const getRandomWord = function(req, res) {
-  console.log(req.session.difficulty);
-  if (req.session.difficulty === 0) {
-    req.session.singleword = easywords[Math.floor(Math.random() * (easywords.length + 1))];
-    req.session.difflevel = "easy";
-  }
-  if (req.session.difficulty === 1) {
-    req.session.singleword = mediumwords[Math.floor(Math.random() * (mediumwords.length + 1))];
-    req.session.difflevel = "medium";
-  }
-  if (req.session.difficulty === 2) {
-    req.session.singleword = hardwords[Math.floor(Math.random() * (hardwords.length + 1))];
-    req.session.difflevel = "hard";
-  }
-  if (req.session.difficulty === 3) {
-    let randomgenword = ""
-    let randomlength = Math.floor(Math.random() * (10) + 1);
-    console.log(randomlength)
-    for (var i = 0; i < randomlength; i++) {
-      let n = Math.floor(Math.random() * (25 - 0));
-      console.log(n)
-      let chr = String.fromCharCode(97 + n)
-      console.log(chr)
-      randomgenword = randomgenword + chr
-      console.log(randomgenword)
+// This sets global variables.
+let word = '';
+const numGuesses = 10;
+let guessCount = numGuesses;
+let wordArray = [];
+let blankArray = [];
+let wordAndBlank = '';
+let attemptArray = [];
+let attemptList = '';
+let newGame = 'true';
+let end = '';
+let submit = 'Submit Guess';
+let difficulty = 'easy';
+let message = "";
+
+// This generates a random word and some arrays.
+const getRandomWord = function guessWord(req, res) {
+  // This resets values for each new game.
+  req.session.word = '';
+  req.session.guessCount = 10;
+  req.session.wordArray = [];
+  req.session.blankArray = [];
+  req.session.wordAndBlank = '';
+  req.session.attemptArray = [];
+  req.session.attemptList = '';
+  req.session.newGame = true;
+  req.session.end = '';
+  req.session.submit = 'Submit Guess';
+  req.session.message = "";
+  req.session.return = '';
+  word = '';
+  guessCount = numGuesses;
+  wordArray = [];
+  blankArray = [];
+  wordAndBlank = '';
+  attemptArray = [];
+  attemptList = '';
+  newGame = 'true';
+  end = '';
+  submit = 'Submit Guess';
+  message = "";
+  console.log("Difficulty: "+ req.session.difficulty);
+    let difficulty = req.session.difficulty;
+    let sizeMin = 3;
+    let sizeMax = 30;
+    let goUp = false;
+    if (difficulty === "easy") {
+      sizeMin = 4;
+      sizeMax = 6;
     }
-    req.session.singleword = randomgenword
-    req.session.difflevel = "mystic";
-  }
-  if (req.session.difficulty === 4) {
-    let n = Math.floor(Math.random() * (25 - 0));
-    console.log(n);
-    let chr = String.fromCharCode(97 + n)
-    console.log(chr)
-    req.session.singleword = chr;
-    req.session.difflevel = "apocalyptic";
-  }
-  if (req.session.difficulty === 5) {
-    let randomgenword = ""
-    req.session.randomlength = Math.floor(Math.random() * (10) + 1);
-    for (var i = 0; i < req.session.randomlength; i++) {
-      randomgenword = randomgenword + "~";
-      console.log(randomgenword)
+    if (difficulty === "normal") {
+      sizeMin = 6;
+      sizeMax = 8;
     }
-    req.session.singleword = randomgenword;
-    req.session.difflevel = "impossible"
-  }
-
-  req.session.wordarr = [];
-  console.log(req.session.singleword)
-  for (var i = 0; i < req.session.singleword.length; i++) {
-    req.session.wordarr.push(req.session.singleword.charAt(i))
-  }
-  req.session.blanksarr = []
-  for (var i = 0; i < req.session.wordarr.length; i++) {
-    req.session.blanksarr.push("_")
-  }
-  req.session.blanksdisplay = req.session.blanksarr.join(" ");
-  req.session.guesses = []
-  req.session.guessdisplay = ""
-  req.session.guessesremaining = 7
-  req.session.hangmanimage = "/images/Hangman-0.png"
-  req.session.solvedmessage = "<form action='/game' method='post'><input type='text' id='letterguess' name='inputguess' value='' maxlength='1' autocomplete='off' autofocus><br><input type='submit' name='Enter' value='Enter'>";
-  return getRandomWord
-  next();
+    if (difficulty === "hard") {
+      sizeMin = 8;
+      sizeMax = 20;
+      req.session.guessCount = 8;
+      goUp = true;
+    }
+    if (difficulty === "hardcore") {
+      sizeMin = 10;
+      sizeMax = 50;
+      req.session.guessCount = 6;
+      goUp = true;
+    }
+    word = easywords[Math.floor(Math.random() * (easywords.length + 1))];
+    while (word.length < sizeMin || word.length > sizeMax) {
+      word = easywords[Math.floor(Math.random() * (easywords.length + 1))];
+    };
+    if (goUp === true) {
+      word = mediumwords[Math.floor(Math.random() * (mediumwords.length + 1))];
+      while (word.length < sizeMin || word.length > sizeMax) {
+        word = mediumwords[Math.floor(Math.random() * (mediumwords.length + 1))];
+      };
+    }
+    // console.log("word: "+word);
+    req.session.word = word;
+      let i = 0;
+      while (i < word.length) {
+        let a = word.charAt(i);
+        wordArray[i] = a;
+        i++;
+      }
+      i = 0;
+      while (i < word.length) {
+        let a = word.charAt(i);
+        blankArray[i] = "_";
+        i++;
+      }
+      wordAndBlank = blankArray.join(" ");
+      req.session.wordAndBlank = wordAndBlank;
+      req.session.wordArray = wordArray;
+      req.session.blankArray = blankArray;
+      console.log(wordArray);
+      console.log(blankArray);
+      console.log("wordAndBlank: " + wordAndBlank);
+      return word;
+      next();
 };
 
-const checkGuess = function(req, res) {
-  req.body.inputguess = req.body.inputguess.toLowerCase();
-  solved = false;
-  var correctguess = false;
-  var alreadyguessed = false;
 
 
-  for (var i = 0; i < req.session.guesses.length; i++) {
-    if (req.session.guesses[i] === req.body.inputguess) {
-      alreadyguessed = true
-    }
-  }
 
-  if (req.body.inputguess === "~") {
-    alreadyguessed = true
-  }
 
-  if (req.body.inputguess === "") {
-    alreadyguessed = true
-  }
 
-  if (alreadyguessed === false) {
-    for (var i = 0; i < req.session.singleword.length; i++) {
-      if (req.body.inputguess === req.session.singleword.charAt(i)) {
-        req.session.blanksarr[i] = req.body.inputguess
-        req.session.blanksdisplay = req.session.blanksarr.join(" ");
-        correctguess = true
+
+
+
+
+
+const checkGuess = function (req, res) {
+  console.log("checkGuess");
+  //Call req.checkBody function.
+  // If the game is over and the button is clicked:
+  // if (req.session.return !== '') {
+  //   req.session.message = "";
+  //   console.log('Go back to index');
+  //   res.redirect('/');
+  // }
+  // else {
+    let letter = req.session.letter;
+    let guessCount = req.session.guessCount;
+    let word = req.session.word;
+    let wordAndBlank = req.session.wordAndBlank;
+    let wordArray = req.session.wordArray;
+    let blankArray = req.session.blankArray;
+    req.session.message = "";
+    // For all turns after the page loads.
+    if (req.session.newGame === false) {
+      // Converts capital letters to lowercase.
+      letter = letter.toLowerCase();
+      if (letter.length > 1 || letter.length === 0) {
+        console.log("Guess not one character");
+        message = '';
+        return letter;
+        next();
       }
-    };
+      // If the guess is acceptable.
+      else {
+        console.log("Letter Guessed: " + letter);
+        // checkLetter(letter);
 
-    if (correctguess === false) {
-      req.session.guesses.push(req.body.inputguess);
-      req.session.guessdisplay = req.session.guesses.join(" ");
-      if (req.session.difficulty === 4) {
-        req.session.guessesremaining = req.session.guessesremaining - 20;
-      } else {
-        req.session.guessesremaining = req.session.guessesremaining - 1;
-      }
-
-    };
-    if (req.session.guessesremaining === 6) {
-      req.session.hangmanimage = "/images/Hangman-1.png"
-    }
-    if (req.session.guessesremaining === 5) {
-      req.session.hangmanimage = "/images/Hangman-2.png"
-    }
-    if (req.session.guessesremaining === 4) {
-      req.session.hangmanimage = "/images/Hangman-3.png"
-    }
-    if (req.session.guessesremaining === 3) {
-      req.session.hangmanimage = "/images/Hangman-3.png"
-    }
-    if (req.session.guessesremaining === 2) {
-      req.session.hangmanimage = "/images/Hangman-4.png"
-    }
-    if (req.session.guessesremaining === 1) {
-      req.session.hangmanimage = "/images/Hangman-5.png"
-    }
-    //////
-    if (req.session.guessesremaining <= 0) {
-      if (req.session.difficulty === 5) {
-        console.log("difficulty generating")
-        let randomgenword = ""
-        console.log("length =" + req.session.randomlength)
-        var i = 0
-        while (i < req.session.randomlength) {
-          console.log("randoming")
-          let n = Math.floor(Math.random() * (25 - 0));
-          console.log(n);
-          let chr = String.fromCharCode(97 + n);
-          console.log(chr);
-          let charwasguessed = false;
-          for (var x = 0; x < req.session.guesses.length; x++) {
-            console.log("checking against guesses")
-            if (req.session.guesses[x] === chr) {
-              charwasguessed = true;
-              console.log("already guessed");
+          // Replace a blank if the letter is in the word.
+          let i = 0;
+          let letterInside = 0;
+          while (i < word.length) {
+            if (letter === wordArray[i]) {
+              if (blankArray[i] === letter) {
+                message = "The letter " + letter + " was added already. Try a different letter."
+              }
+              else{
+               message = '';
+              }
+              blankArray[i] = letter;
+              letterInside++;
+            }
+            i++;
+          }
+          console.log("Letter: " + letter + " found: " + letterInside + " times.");
+          //  If the letter is not inside.
+          let previousGuess = false;
+          let o = 0;
+          if (letterInside === 0) {
+            console.log("Letter not in word: " + letter);
+            console.log("Attempts: " + attemptArray[o]);
+            while (o < attemptArray.length) {
+              if (letter === attemptArray[o]) {
+                previousGuess = true;
+              }
+              o++;
+            }
+            //  If you have guessed the letter previously.
+            if (previousGuess) {
+              // console.log("You guessed the letter: "+letter+" already.");
+              message = "You guessed the letter " + letter + " already. Try a different letter."
+            } else {
+              message = '';
+              attemptArray.push(letter);
+              attemptList = attemptArray.join(" ");
+              guessCount--;
+              //  This checks to see if the user ran out of guesses.
+              if (guessCount === 0) {
+                console.log("Game Over");
+                end = "Game Over";
+                //  This fills in the missing letters.
+                i = 0;
+                while (i < word.length) {
+                  if (blankArray[i] === "_") {
+                    let a = wordArray[i].toUpperCase();
+                    blankArray[i] = a;
+                  }
+                  // blankArray[i] = wordArray[i];
+                  i++;
+                }
+              }
             }
           }
-          if (charwasguessed === false) {
-            i++;
-            randomgenword += chr;
-          }
-          console.log(randomgenword)
-        }
-        req.session.singleword = randomgenword
-      }
-      req.session.hangmanimage = "/images/Hangman-6.png"
-      req.session.solvedmessage = "YOU LOSE! The word was " + req.session.singleword + "." +
-        `<form action='/playagain' method='post'>
-						<input type='submit' name= "/" value="Play Again?">
-						</form>`
-    }
-    req.session.solved = true
-    for (var i = 0; i < req.session.blanksarr.length; i++) {
-      if (req.session.blanksarr[i] === "_") {
-        req.session.solved = false
-      }
-    }
-    if (req.session.solved === true) {
-      req.session.solvedmessage = "YOU SOLVED IT!" +
-        `<form action='/winnerform' method='post'>
-						<input type='submit' name= "/" value="Record Your Score?">
-						</form><br>
-						<form action='/playagain' method='post'>
-						<input type='submit' name= "/" value="Play Again?">
-						</form>`
-    }
-  }
-  ////////
 
-  return checkGuess;
-  next();
+          //  This checks for a win.
+          if (letterInside > 0) {
+            let p = 0;
+            let lettersCorrect = 0;
+            while (p < word.length) {
+              if (blankArray[p] === wordArray[p]) {
+                lettersCorrect++;
+              }
+              p++;
+            }
+            if (lettersCorrect === word.length) {
+              console.log("WIN!");
+              end = "You Won";
+            }
+          }
+          wordAndBlank = blankArray.join(" ");
+          req.session.wordAndBlank = wordAndBlank;
+          req.session.wordArray = wordArray;
+          req.session.blankArray = blankArray;
+          req.session.message = message;
+          req.session.end = end;
+          //  console.log("word: " + word);
+          //  console.log("Letter: " + letter);
+          //  console.log("wordAndBlank: " + wordAndBlank);
+        console.log("Guesses Left: " + guessCount);
+        if (req.session.end !== '') {
+          req.session.submit = "Back to Menu";
+        }
+        req.session.guessCount = guessCount;
+        req.session.attemptList = attemptList;
+        console.log("req.session.word: " + req.session.word + ", guessCount: " + req.session.guessCount + ", attempts: " + req.session.attemptList);
+        return letter;
+        next();
+      }
+    }
+  // }
 };
 
+
+
+
 module.exports = {
-  getRandomWord: getRandomWord,
-  checkGuess: checkGuess,
+	getRandomWord : getRandomWord,
+	checkGuess : checkGuess,
 }

@@ -14,7 +14,10 @@
     <p id="wordGuess">{{blanks}}</p>
     <p>Guesses Remaining: {{count}}</p>
     <p>Letters Guessed: {{attempt}}</p>
-    <input type="text" name="guess" id="item" placeholder="Guess a letter..." maxlength="1" pattern="[A-Za-z]+" oninvalid="setCustomValidity('Please enter a letter')" onchange="try{setCustomValidity('')}catch(e){}" />
+    <input type="text" name="guess" id="item" placeholder="Guess a letter..." maxlength="1"
+    pattern="[A-Za-z]+"
+    oninvalid="setCustomValidity('Please enter a letter')"
+    onchange="try{setCustomValidity('')}catch(e){}" />
     <button type="submit">{{submit}}</button>
   </form>
   {{#end}}
@@ -25,7 +28,7 @@
     <p>{{message}}</p>
   </div>
   {{^end}}
-  <button type="submit">Hint</button>
+  <!-- <button type="submit">Hint</button> -->
   {{/end}}
   <script type="text/javascript" src="javascripts/main.js"></script>
 </body>
